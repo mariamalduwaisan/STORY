@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import { getPaymentStatus } from '@/lib/myfatoorah'
 
-const supabaseAdmin = createClient(
+// Uses anon key — mark_purchase_paid runs as SECURITY DEFINER so RLS is bypassed safely
+const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
@@ -31,7 +32,7 @@ export default async function PaymentSuccess({ searchParams }: Props) {
 
       if (json.IsSuccess && json.Data.InvoiceStatus === 'Paid') {
         const invoiceId = String(json.Data.InvoiceId)
-        await supabaseAdmin.rpc('mark_purchase_paid', { p_invoice_id: invoiceId })
+        await supabase.rpc('mark_purchase_paid', { p_invoice_id: invoiceId })
       }
     } catch {
       // best-effort — don't block the page

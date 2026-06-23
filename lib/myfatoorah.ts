@@ -1,4 +1,4 @@
-const BASE_URL = 'https://apitest.myfatoorah.com'
+const BASE_URL = process.env.MYFATOORAH_API_URL ?? 'https://apitest.myfatoorah.com'
 const API_KEY  = process.env.MYFATOORAH_API_KEY!
 
 const headers = () => ({
